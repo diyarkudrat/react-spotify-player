@@ -9,7 +9,7 @@ export const authEndpoint =
 'https://accounts.spotify.com/authorize';
 
 const clientId = 'a26a6acae9184ea8bd9acc1a9742defa';
-const redirectUri = "https://localhost:3000";
+const redirectUri = "http://localhost:3000/";
 const scopes = [
   "user-read-currently-playing",
   "user-read-playback-state",
@@ -97,8 +97,8 @@ class App extends Component {
 
   render() {
     return (
-      <div className='App'>
-        <header className='App-logo' alt='logo'>
+      <div className="App">
+        <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           {!this.state.token && (
             <a
@@ -111,12 +111,15 @@ class App extends Component {
             </a>
           )}
           {this.state.token && (
-            
+            <Player
+              item={this.state.item}
+              is_playing={this.state.is_playing}
+              progress_ms={this.progress_ms}
+            />
           )}
         </header>
-
       </div>
-    )
+    );
   }
 }
 
