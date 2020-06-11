@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 // import hash from "./hash";
 import logo from './logo.svg';
 import './App.css';
+import * as $ from 'jquery';
+import Player from "./Player";
 
 export const authEndpoint =
 'https://accounts.spotify.com/authorize';
@@ -48,6 +50,23 @@ window.location.hash = '';
 // }
 
 class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      token: null,
+      item: {
+        album: {
+          images: [{ url: ""}]
+        },
+        name: "",
+        artists: [{ name: ""}],
+        duration_ms: 0
+      },
+      is_playing: "Paused",
+      progress_ms: 0
+    };
+    this.getCurrentlyPlaying = this.getCurrentlyPlaying.bind(this);
+  }
   componentDidMount() {
     //set token
     let _token = hash.access_token;
@@ -55,7 +74,25 @@ class App extends Component {
       this.setState({
         token: _token
       });
+      this.getCurrentlyPlaying(_token);
     }
+  }
+
+  getCurrentlyPlaying(token) {
+    $.ajax({
+      url: "https://api.spotify.com/v1/me/player",
+      type: "GET",
+      beforeSend: xhr => {
+        xhr.setRequestHeader("Authorization", "Bearer" + token);
+      },
+      success: data => {
+        this.setState({
+          item: data.item,
+          is_playing: data.is_playing,
+          progress_ms: data.progress_ms
+        });
+      }
+    });
   }
 
   render() {
