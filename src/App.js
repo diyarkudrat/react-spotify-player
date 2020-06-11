@@ -110,6 +110,9 @@ class App extends Component {
               Login to Spotify
             </a>
           )}
+          {this.state.token && (
+            
+          )}
         </header>
 
       </div>
